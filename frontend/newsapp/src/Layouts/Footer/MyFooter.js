@@ -1,4 +1,4 @@
-import "../../Assects/Styles/MyFooter.css";
+import "../../Assets/Styles/MyFooter.css";
 
 function MyFooter() {
   return (

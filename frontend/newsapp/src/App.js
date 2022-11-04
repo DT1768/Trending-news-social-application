@@ -3,6 +3,7 @@ import "./App.css";
 import MyNavbar from "./Layouts/Header/MyNavbar";
 import MyFooter from "./Layouts/Footer/MyFooter";
 import NewsItem from "./Layouts/Main/NewsItem";
+import NewsComponent from "./Layouts/Main/NewsComponent";
 
 function App() {
   return (
@@ -16,7 +17,9 @@ function App() {
         NewsCatagory5="Sports"
         NewsCatagory6="Technology"
       />
-      <NewsItem />
+
+      <NewsComponent />
+
       <MyFooter />
     </>
   );

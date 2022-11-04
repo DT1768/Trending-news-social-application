@@ -1,4 +1,4 @@
-import "../../Assects/Styles/MyNavbar.css";
+import "../../Assets/Styles/MyNavbar.css";
 
 function MyNavbar(props) {
   return (
@@ -59,11 +59,11 @@ function MyNavbar(props) {
                 placeholder="Search"
                 aria-label="Search"
               />
-              <button className="btn btn-outline-success search" type="submit">
+              <button className="btn btn-outline-light search" type="submit">
                 Search
               </button>
             </form>
-            <button className="btn btn-outline-success SignIn" type="submit">
+            <button className="btn btn-outline-light SignIn" type="submit">
               SignIn
             </button>
           </div>
