@@ -4,11 +4,6 @@ const{ObjectId} = mongoose.Schema;
 
 const subcategorySchema = new Schema(
     {
-        id:{
-            type:string,
-            required:true,
-            unique:true
-        },
         name: {
             type: String,
             trim: true,
