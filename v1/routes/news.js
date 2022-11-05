@@ -1,16 +1,13 @@
 const express = require('express')
-const axios = require('axios')
-const newsr=express.Router()
-const moment = require('moment')
-const math = require('math')
+const router=express.Router()
 const googleTrends = require('google-trends-api');
 
 require('dotenv').config();
 
-newsr.post('/',async(req,res) => {
-    // var location = req.body.location;
-    var location = 'CA';
-    googleTrends.dailyTrends({ geo: location }, function(err, results) {
+router.post('/',async(req,res) => {
+    var location = req.body.location;
+    //var location = 'IN';
+    googleTrends.dailyTrends({ geo: location}, function(err, results) {
     if (err) {
         console.log(err);
     }else{
@@ -31,6 +28,9 @@ newsr.post('/',async(req,res) => {
                 };
             }
             res.send(finalOutput);
+            finalOutput = [];
+            output = "";
+            console.log(finalOutput);
         }
         catch(error){
             console.log(error);;
@@ -39,41 +39,4 @@ newsr.post('/',async(req,res) => {
 });
 })
 
-
-
-newsr.post('/category',async(req,res)=>{
-    const category=req.body.category
-    //console.log(req.body.category)
-
-    try {
-        var url = 'http://newsapi.org/v2/top-headlines?' +
-        'country=ca&' + `category=${category}&`+
-        `apiKey=${process.env.NEWSAPIKEY}`;
-
-        const news_get =await axios.get(url)
-        res.render('news',{articles:news_get.data.articles})
-    } catch (error) {
-        if(error.response){
-            console.log(error)
-        }
-    }
-})
-
-newsr.post('/search',async(req,res)=>{
-    const search=req.body.search
-    // console.log(req.body.search)
-
-    try {
-        var url = `http://newsapi.org/v2/everything?q=${search}&${`apiKey=${process.env.NEWSAPIKEY}`}`
-
-        const news_get =await axios.get(url)
-        res.render('news',{articles:news_get.data.articles})
-    } catch (error) {
-        if(error.response){
-            console.log(error)
-        }
-    }
-})
-
-
-module.exports=newsr
+module.exports=router
