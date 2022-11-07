@@ -4,6 +4,7 @@ import MyNavbar from "./Layouts/Header/MyNavbar";
 import MyFooter from "./Layouts/Footer/MyFooter";
 import NewsItem from "./Layouts/Main/NewsItem";
 import NewsComponent from "./Layouts/Main/NewsComponent";
+import NewsComponent2 from "./Layouts/Main/NewsComponent2";
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
         NewsCatagory6="Technology"
       />
 
-      <NewsComponent />
+      <NewsComponent2 />
 
       <MyFooter />
     </>
