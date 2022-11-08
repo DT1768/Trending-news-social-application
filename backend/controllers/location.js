@@ -15,8 +15,8 @@ exports.getLocationById = (req,res,next,id) => {
 };
 
 exports.createLocation = (req,res) => {
-    const Location = new Location(req.body);
-    category.save((err,location) => {
+    const location = new Location(req.body);
+    location.save((err,location) => {
         if(err){
             res.status(400).json({
                 error: "cannot create location."

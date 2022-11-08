@@ -11,7 +11,7 @@ const locationSchema = new Schema(
             maxlength:32,
             unique:true
         },
-        countrycode: {
+        code: {
             type:String,
             required:true,
             maxlength:32,
