@@ -13,6 +13,7 @@ const googleTrends = require("google-trends-api");
 const newsRoutes = require("./routes/news");
 const categoryRoutes = require("./routes/category");
 const subcategoryRoutes = require("./routes/subcategory");
+const locationRoutes = require("./routes/location");
 
 mongoose.connect(process.env.DATABASE,{
     useNewUrlParser: true,
@@ -33,6 +34,7 @@ app.use(bodyParser.json());
 app.use("/api", newsRoutes);
 app.use("/api",categoryRoutes);
 app.use("/api",subcategoryRoutes);
+app.use("/api",locationRoutes);
 
 const port = process.env.PORT || 8000;
 
