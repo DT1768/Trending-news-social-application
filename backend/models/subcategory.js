@@ -4,16 +4,17 @@ const{ObjectId} = mongoose.Schema;
 
 const subcategorySchema = new Schema(
     {
-        id:{
-            type:string,
-            required:true,
-            unique:true
-        },
         name: {
             type: String,
             trim: true,
             required: true,
-            maxlength: 32,
+            maxlength: 60,
+            unique: true
+        },
+        trendid:{
+            type: String,
+            required: true,
+            trim: true,
             unique: true
         },
         category:{
