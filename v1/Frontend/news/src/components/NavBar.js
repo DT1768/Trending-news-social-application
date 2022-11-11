@@ -63,6 +63,26 @@ const NavBar = () => {
                 </Link>
               </li>
             </ul>
+            <form class="form-inline">
+              <input
+                class="form-control mr-sm-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              />
+            </form>
+            <button
+              class="btn btn-outline-light my-2 mx-3 my-sm-0"
+              type="submit"
+            >
+              Search
+            </button>
+            <button
+              class="btn btn-outline-light my-2 mx-1 my-sm-0"
+              type="signIn"
+            >
+              SignIn
+            </button>
           </div>
         </div>
       </nav>
