@@ -4,14 +4,7 @@ const{ObjectId} = mongoose.Schema;
 
 const chatSchema = new Schema(
     {
-        id:{
-            type:string,
-            required:true,
-            unique:true
-        },
-        
         sender: {
-
             type: ObjectId,
             ref: "User",
             required: true
@@ -28,7 +21,9 @@ const chatSchema = new Schema(
 
         }
     },
-    {timestamps: true}
+    {
+        timestamps: true
+    }
 );
 
 module.exports = mongoose.model("Chat", chatSchema);

@@ -1,60 +1,114 @@
+googleTrends = require("google-trends-api");
+const NewsAPI = require('newsapi');
+const newsapi = new NewsAPI(process.env.NEWSAPIKEY);
+
+class news {
+    constructor(title,url,image,snippet,source,lastUpdated){
+        this.title = title;
+        this.url = url;
+        this.image = image;
+        this.snippet = snippet;
+        this.source = source;
+        this.lastUpdated = lastUpdated;
+    }
+}
 
 exports.newsHome = async(req,res) => {
-    googleTrends.dailyTrends({ geo: 'CA' }, function(err, results) {
-    if (err) {
-        console.log(err);
-    }else{
-        try{
-            var output = results.toString()
-            output = JSON.parse(output)
-            output = output.default.trendingSearchesDays;
-            output = output[0].trendingSearches;
-            var finalOutput = [];
-            for(var i = 0; i<output.length; i++){
-                finalOutput[i] = {title :output[i].articles[0].title,url :output[i].articles[0].url,image: output[i].articles[0].image.imageUrl, snippet: output[i].articles[0].snippet , source: output[i].articles[0].source , lastUpdated: output[i].articles[0].timeAgo };
+
+    //responses
+    var trendsdaily = [];
+
+    //requests from frontend
+    var location = req.body.location;
+    googleTrends.dailyTrends(
+        { 
+            geo: location
+        },
+        function(err, results) {
+            if (err) {
+                console.log(err);
+            }else{
+                try{
+                    results = results.toString()
+                    results = JSON.parse(results)
+                    results = results.default.trendingSearchesDays;
+                    results = results[0].trendingSearches;
+                    //res.send(output);
+                    for(var i = 0; i<results.length; i++){
+                        trendsdaily[i] = new news(
+                            results[i].articles[0].title,
+                            results[i].articles[0].url,
+                            results[i].image.imageUrl,
+                            results[i].articles[0].snippet,
+                            results[i].articles[0].source,
+                            results[i].articles[0].timeAgo)
+                        /*trendsdaily[i] = {
+                            title :output[i].articles[0].title,
+                            url :output[i].articles[0].url,
+                            image: output[i].image.imageUrl, 
+                            snippet: output[i].articles[0].snippet , 
+                            source: output[i].articles[0].source , 
+                            lastUpdated: output[i].articles[0].timeAgo 
+                        };*/
+                    }
+                    res.send(trendsdaily);
+                }
+                catch(error){
+                    console.log(error);;
+                }
             }
-            res.send(finalOutput);
-        }
-        catch(error){
-            console.log(error);;
-        }
+        });
     }
-});
+
+exports.newsSearch = async(req,res) => {
+
+    var keywordSearch = [];
+
+    var keyword = req.body.keyword;
+
+    newsapi.v2.everything({
+        q: keyword,
+        language: "en",
+        searchIn: "title",
+        sortBy: "popularity",
+        }).then(response => {
+        var results = response.articles;
+        for(var i=0;i<results.length;i++){
+            keywordSearch[i] = new news(
+                results[i].title,                
+                results[i].url,                
+                results[i].urlToImage,                
+                results[i].description,                
+                results[i].source.name,                
+                results[i].publishedAt,                
+            )
+        }
+        res.json(keywordSearch);
+        });
 }
 
-exports.newsCategory = async(req,res)=>{
-    const category=req.body.category
-    //console.log(req.body.category)
+exports.newsSearchByCategory = async(req,res) => {
 
-    try {
-        var url = 'http://newsapi.org/v2/top-headlines?' +
-        'country=ca&' + `category=${category}&`+
-        `apiKey=${process.env.NEWSAPIKEY}`;
+    var searchByCategory = [];
 
-        const news_get =await axios.get(url)
-        res.render('news',{articles:news_get.data.articles})
-    } catch (error) {
-        if(error.response){
-            console.log(error)
+    var category = req.body.category;
+    var location = req.body.location;
+
+    newsapi.v2.topHeadlines({
+        category: category,
+        country: location,
+        }).then(response => {
+        var results = response.articles;
+        for(var i=0;i<results.length;i++){
+            searchByCategory[i] = new news(
+                results[i].title,                
+                results[i].url,                
+                results[i].urlToImage,                
+                results[i].description,                
+                results[i].source.name,                
+                results[i].publishedAt,                
+            )
         }
-    }
-}
-
-exports.newsSearch = async(req,res)=>{
-    const search=req.body.search
-    // console.log(req.body.search)
-
-    try {
-        var url = `http://newsapi.org/v2/everything?q=${search}&${`apiKey=${process.env.NEWSAPIKEY}`}`
-
-        const news_get =await axios.get(url)
-
-        return res.json(news_get)
-
-        //res.render('news',{articles:news_get.data.articles})
-    } catch (error) {
-        if(error.response){
-            console.log(error)
-        }
-    }
+        res.json(searchByCategory);
+        });
 }
