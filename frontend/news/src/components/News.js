@@ -88,12 +88,14 @@ const News = (props) => {
 };
 
 News.defaultProps = {
+  location: "US",
   country: "in",
   pageSize: 8,
   category: "general",
 };
 
 News.propTypes = {
+  location: PropTypes.string,
   country: PropTypes.string,
   pageSize: PropTypes.number,
   category: PropTypes.string,
