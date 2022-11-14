@@ -18,10 +18,10 @@ router.get('/googlelogin',passport.authenticate("google",{
 
 router.get('/login',passport.authenticate("google"),(req,res,next) => {
     if(req.user.preferences == undefined || req.user.location == undefined){
-        //res.json(req.user);
+        res.json(req.user);
         //successRedirect: process.env.FRONTENDURL,
         //call update prefrences.
-        res.send("Logged In.");
+        //  res.send("Logged In.");
     }
     else{
         //successRedirect: process.env.FRONTENDURL,
