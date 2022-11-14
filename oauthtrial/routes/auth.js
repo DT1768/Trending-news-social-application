@@ -1,12 +1,8 @@
 const router = require("express").Router();
 const passport = require("passport");
 
-router.get("/login/failed",(req,res)=> {
-    res.status(401).json({
-        error: true,
-        message: "log in failed",
-    });
-});
+
+
 
 router.get(
     "google/callback",
