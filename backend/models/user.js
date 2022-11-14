@@ -3,10 +3,19 @@ const{ObjectId} = mongoose.Schema;
 var userSchema = new mongoose.Schema(
     {
         //TODO: Oauth Data
+        googleId:{
+            type: String,
+            unique: true,
+        },
         name: {
             type:String,
             required:true,
-            maxlength:32,
+        },
+        photo:{
+            type: String,
+        },
+        email:{
+            type: String,
         },
         location:{
             type: ObjectId,
