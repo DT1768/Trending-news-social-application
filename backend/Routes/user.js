@@ -18,7 +18,7 @@ router.get('/googlelogin',passport.authenticate("google",{
 
 router.get('/login',passport.authenticate("google"),(req,res,next) => {
     if(req.user.preferences == undefined || req.user.location == undefined){
-        res.json(req.user);
+        res.redirect(301,"http://localhost:3000/updateprofile");
         //successRedirect: process.env.FRONTENDURL,
         //call update prefrences.
         //  res.send("Logged In.");
@@ -26,10 +26,11 @@ router.get('/login',passport.authenticate("google"),(req,res,next) => {
     else{
         //successRedirect: process.env.FRONTENDURL,
         res.send("Logged In.");
+        res.redirect(301,"http://localhost:3000/newshome");
     }
 });
 
-router.put('/updateprofile', isAuthenticated, updatePrefrences);
+router.put('/updateuser', updatePrefrences);
 
 router.get('/me',isAuthenticated , myProfile);
 

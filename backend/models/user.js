@@ -18,10 +18,12 @@ var userSchema = new mongoose.Schema(
             type: String,
         },
         location:{
-            type: ObjectId,
-            ref: "Location"
+            type: String,
+            default: "",
         },
-        prefrences:[{type: ObjectId, ref: "Category"}],
+        prefrences:[
+            {type: String},
+        ],
         Friendlist:[{type: ObjectId, ref: "User"}],
         Following:[{type: ObjectId, ref: "User"}],
         Followers:[{type: ObjectId, ref: "User"}],

@@ -1,11 +1,9 @@
+const { default: mongoose } = require("mongoose");
 const passport = require("passport");
 const User = require("../models/user");
 
 exports.myProfile = (req,res,next) =>{
-    res.status(200).json({
-        success:true,
-        user: req.user,
-    });
+    res.status(200).json(req.user);
 };
 
 exports.logOut = (req,res,next) => {
@@ -25,7 +23,9 @@ exports.logOut = (req,res,next) => {
 exports.isAuthenticated = (req,res,next) => {
     const token = req.cookies["connect.sid"];
     console.log(token);
+    //console.log(JSON.stringify(req.user));
     if(!token){
+        console.log("not logged in");
         return res.status(401).json({
             message: "Not Logged In",
         })
@@ -37,25 +37,39 @@ exports.isAuthenticated = (req,res,next) => {
 
 exports.updatePrefrences = (req,res) => {
 
+    var user = new User(req.body.user);
+
+    user.location = req.body.location;
+    
+    
+
     let prefrences = [];
     req.body.prefrences.forEach(prefrence => {
-        prefrences.push(prefrence.id);
+        prefrences.push(prefrence);
     })
 
-    User.findOneAndUpdate(
-        {id: req.user.id},
-        {
-            location: req.body.location.id,
-            prefrenecs: prefrences,
-        },
-        {
+    console.log(req.body)
+
+    User.findByIdAndUpdate(
+        mongoose.Types.ObjectId(req.body.user),
+        {$set:{location: req.body.location},
+        $push:{
+            "prefrences.0": prefrences[0],
+            "prefrences.1": prefrences[1],
+            "prefrences.2": prefrences[2],
+        }
+        },{
+            new: true,
             overwrite: true,
         },
         (err,result) => {
             if(err){
-                res.send(err)
+                res.send(err);
+                console.log(err)
             }
             else{
+                console.log("success");
+                console.log(result);
                 res.send("Prefrences updated.")
             }
         }
