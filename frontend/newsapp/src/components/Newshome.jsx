@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import NewsItem from "./Newsitem";
 import PropTypes from "prop-types";
-import axios from "axios";
+
+import { getAllNews } from "./helper/NewsHelper";
 
 const News = (props) => {
   console.log(props);
@@ -14,15 +15,10 @@ const News = (props) => {
 
   const updateNews = async () => {
     console.log(props);
-    const url = `http://localhost:8000/api/trending`;
 
-    let headers = new Headers();
-    headers.append("Content-Type", "application/json");
-    let data = await fetch(url, {
-      method: "POST",
-      body: JSON.stringify({ location: "CA" }),
-      headers,
-    });
+    const data = () => {
+      getAllNews().then();
+    };
 
     let parsedData = await data.json();
     console.log(parsedData);
