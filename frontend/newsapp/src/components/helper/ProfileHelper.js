@@ -28,9 +28,11 @@ export const getUser = () => {
 
 export const updateUser = (user,values) => {
     const data = {
-        user: user,
+        userid: user._id,
         location: values.location,
-        prefrences: [values.prefrence1,values.prefrence2,values.prefrence3]
+        prefrence1: values.prefrence1,
+        prefrence2: values.prefrence2,
+        prefrence3: values.prefrence3
     };
 
     return fetch(`${API}/updateuser`,{

@@ -21,9 +21,21 @@ var userSchema = new mongoose.Schema(
             type: String,
             default: "",
         },
-        prefrences:[
-            {type: String},
-        ],
+        prefrence1:
+            {
+                type: String,
+                default:""
+            },
+        prefrence2:
+            {
+                type: String,
+                default:""
+            },
+        prefrence3:
+            {
+                type: String,
+                default:""
+            },
         Friendlist:[{type: ObjectId, ref: "User"}],
         Following:[{type: ObjectId, ref: "User"}],
         Followers:[{type: ObjectId, ref: "User"}],

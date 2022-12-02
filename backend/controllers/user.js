@@ -37,27 +37,18 @@ exports.isAuthenticated = (req,res,next) => {
 
 exports.updatePrefrences = (req,res) => {
 
-    var user = new User(req.body.user);
-
-    user.location = req.body.location;
     
-    
-
-    let prefrences = [];
-    req.body.prefrences.forEach(prefrence => {
-        prefrences.push(prefrence);
-    })
-
     console.log(req.body)
 
     User.findByIdAndUpdate(
         mongoose.Types.ObjectId(req.body.user),
-        {$set:{location: req.body.location},
-        $push:{
-            "prefrences.0": prefrences[0],
-            "prefrences.1": prefrences[1],
-            "prefrences.2": prefrences[2],
-        }
+        {$set:{
+            location: req.body.location,
+            prefrence1: req.body.prefrence1,
+            prefrence2: req.body.prefrence2,
+            prefrence3: req.body.prefrence3,
+        },
+        
         },{
             new: true,
             overwrite: true,

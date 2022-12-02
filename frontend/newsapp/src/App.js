@@ -1,4 +1,4 @@
-import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Home from "./components/home/home";
 import Header from "./components/layout/Header";
 import UpdateProfile from "./components/updateprofile";
@@ -11,10 +11,10 @@ function App() {
   return (
     <Router>
       {/* <Header /> */}
-      <Routes>
+      <Switch>
         <Route path="/" element={<Home />} />
         <Route path="/updateprofile" element={<UpdateProfile />} />
-      </Routes>
+      </Switch>
     </Router>
     );
 }
