@@ -39,7 +39,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: 'https://social-media-news-application.herokuapp.com',
+    origin: 'http://localhost:3000',
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
 }));
