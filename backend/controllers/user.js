@@ -1,8 +1,6 @@
-const { default: mongoose } = require("mongoose");
-const passport = require("passport");
-const User = require("../models/user");
+const User = require("../models/User");
 
-exports.myProfile = (req,res,next) =>{
+exports.myProfile = (req,res) =>{
     res.status(200).json(req.user);
 };
 
@@ -35,34 +33,28 @@ exports.isAuthenticated = (req,res,next) => {
     }
 };
 
-exports.updatePrefrences = (req,res) => {
 
-    
-    console.log(req.body)
-
-    User.findByIdAndUpdate(
-        mongoose.Types.ObjectId(req.body.user),
-        {$set:{
-            location: req.body.location,
-            prefrence1: req.body.prefrence1,
-            prefrence2: req.body.prefrence2,
-            prefrence3: req.body.prefrence3,
-        },
-        
-        },{
-            new: true,
-            overwrite: true,
-        },
-        (err,result) => {
-            if(err){
-                res.send(err);
-                console.log(err)
-            }
-            else{
-                console.log("success");
-                console.log(result);
-                res.send("Prefrences updated.")
-            }
+exports.getUserById = (req,res) => {
+    User.findById(req.body.userId, (err,doc) => {
+        if(err){
+            console.log(err);
         }
-    )
+        else{
+            res.json(doc);
+        }
+    })
+}
+
+
+exports.getAllUsers = (req,res) => {
+    User.find().exec((err,users) => {
+        if (err) {
+            res.status(400).json({
+                error: "No users found."
+            });
+        }
+        else {
+            res.json(users);
+        }
+    })
 }

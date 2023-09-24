@@ -1,5 +1,3 @@
-
-//Library Imports
 require('dotenv').config();
 
 const express = require("express");
@@ -10,25 +8,23 @@ const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-
-//Routes Imports
-const newsRoutes = require("./routes/news");
-const categoryRoutes = require("./routes/category");
-const subcategoryRoutes = require("./routes/subcategory");
-const locationRoutes = require("./routes/location");
-const userRoutes = require("./routes/user");
-const {connectPassport} = require("./config/passport");
+const { connectPassport } = require("./config/passport");
 const passport = require('passport');
 
-//DB Connect
-mongoose.connect(process.env.DATABASE,{
+//Route imports
+const newsRoutes = require("./routes/news");
+const userRoutes = require("./routes/user");
+const prefrenceRoutes = require("./routes/prefrences");
+const socialRoutes = require("./routes/social");
+
+mongoose.connect(process.env.DATABASE, {
     useNewUrlParser: true,
-    useUnifiedTopology: true 
-}).then( () => {
-        console.log('Connected to the database ')
-    }).catch( (err) => {
-        console.error(`Error connecting to the database. n${err}`);
-    })
+    useUnifiedTopology: true
+}).then(() => {
+    console.log('Connected to the database ')
+}).catch((err) => {
+    console.error(`Error connecting to the database. n${err}`);
+})
 
 //using Middlewares
 app.use(session({
@@ -44,19 +40,18 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors({
     origin: 'http://localhost:3000',
-    credentials: true
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
 }));
-
 
 connectPassport();
 app.use("/api", newsRoutes);
-app.use("/api",categoryRoutes);
-app.use("/api",subcategoryRoutes);
-app.use("/api",locationRoutes);
-app.use("/api",userRoutes);
+app.use("/api", userRoutes);
+app.use("/api", prefrenceRoutes);
+app.use("/api", socialRoutes);
 
 const port = process.env.PORT || 8000;
 
-app.listen(port,()=>{
+app.listen(port, () => {
     console.log(`app is running at ${port}....`)
 });

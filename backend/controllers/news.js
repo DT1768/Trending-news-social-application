@@ -1,8 +1,10 @@
-googleTrends = require("google-trends-api");
+const googleTrends = require("google-trends-api");
 const NewsAPI = require('newsapi');
 const newsapi = new NewsAPI(process.env.NEWSAPIKEY);
 
-class news {
+const SavedNews = require("../models/Savednews");
+
+class News {
     constructor(title,url,image,snippet,source,lastUpdated){
         this.title = title;
         this.url = url;
@@ -13,7 +15,7 @@ class news {
     }
 }
 
-exports.newsHome = async(req,res) => {
+exports.newsHome = (req,res) => {
 
     //responses
     var trendsdaily = [];
@@ -35,7 +37,7 @@ exports.newsHome = async(req,res) => {
                     results = results[0].trendingSearches;
                     //res.send(output);
                     for(var i = 0; i<results.length; i++){
-                        trendsdaily[i] = new news(
+                        trendsdaily[i] = new News(
                             results[i].articles[0].title,
                             results[i].articles[0].url,
                             results[i].image.imageUrl,
@@ -60,7 +62,7 @@ exports.newsHome = async(req,res) => {
         });
     }
 
-exports.newsSearch = async(req,res) => {
+exports.newsSearch = (req,res) => {
 
     var keywordSearch = [];
 
@@ -74,7 +76,7 @@ exports.newsSearch = async(req,res) => {
         }).then(response => {
         var results = response.articles;
         for(var i=0;i<results.length;i++){
-            keywordSearch[i] = new news(
+            keywordSearch[i] = new News(
                 results[i].title,                
                 results[i].url,                
                 results[i].urlToImage,                
@@ -84,7 +86,7 @@ exports.newsSearch = async(req,res) => {
             )
         }
         res.json(keywordSearch);
-        });
+        }).catch(error => console.log(error));
 }
 
 exports.newsSearchByCategory = async(req,res) => {
@@ -94,13 +96,15 @@ exports.newsSearchByCategory = async(req,res) => {
     var category = req.body.category;
     var location = req.body.location;
 
+    location = location.toLowerCase();
+
     newsapi.v2.topHeadlines({
         category: category,
         country: location,
         }).then(response => {
         var results = response.articles;
         for(var i=0;i<results.length;i++){
-            searchByCategory[i] = new news(
+            searchByCategory[i] = new News(
                 results[i].title,                
                 results[i].url,                
                 results[i].urlToImage,                
@@ -111,4 +115,72 @@ exports.newsSearchByCategory = async(req,res) => {
         }
         res.json(searchByCategory);
         });
+};
+
+exports.saveNews = (req,res) => {
+
+    try {
+        SavedNews.findOneAndUpdate(
+            { user: req.body.userId },
+            {
+                $push: {
+                    news: req.body.news
+                }
+            },
+            {
+                new: true,
+                upsert: true
+            },
+            (err, doc) => {
+                if (err) {
+                    res.json(err);
+                    console.log(err);
+                }
+                res.json(doc)
+            }
+        );
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+exports.findNewsByName = (req,res) => {
+    try{
+        SavedNews.findOne(
+            { 
+                user: req.body.userId,
+                "news.title" : req.body.news.title 
+            },
+            (err,doc) => {
+                if(err){
+                    res.json(err)
+                }
+                res.json(doc)
+            }
+        )
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+exports.findNewsByUser = (req, res) => {
+    //const newsTitle = req.body.news.title;
+    try {
+        SavedNews.findOne(
+            {
+                user: req.body.userId
+            },
+            (err, doc) => {
+                if (err) {
+                    res.json(err)
+                }
+                res.json(doc)
+            }
+        )
+    }
+    catch (error) {
+        console.log(error);
+    }
 }
